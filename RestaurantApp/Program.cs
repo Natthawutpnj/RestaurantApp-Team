@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestaurantApp
 {
@@ -34,7 +32,7 @@ namespace RestaurantApp
                 Console.Write("กรุณากรอกตัวเลข 0-5: ");
             }
 
-            int newId = restaurants.Max(r => r.UID) + 1;
+            int newId = restaurants.Count == 0 ? 1 : restaurants.Max(r => r.UID) + 1;
             restaurants.Add(new Restaurant(newId, name, type, rating));
             Console.WriteLine("เพิ่มร้านเรียบร้อย");
 
@@ -45,17 +43,42 @@ namespace RestaurantApp
                 Console.WriteLine($"{item.UID}. {item._name} ({item._type}) - Rating: {item._score}");
             }
 
-            Console.WriteLine($"Total is {restaurants.Count}");
-            Console.WriteLine($"Average is {restaurants.Average(x => x._score):F2}");
-
-            // ---------- feature/good-rating: เฉพาะร้านคะแนน 4.5 ขึ้นไป ----------
+            // ---------- feature/good-rating ----------
             Console.WriteLine("\nRestaurants with rating 4.5 or higher:");
-            foreach (var r in restaurants.Where(x => x._score >= 4.5))
+            var good = restaurants.Where(x => x._score >= 4.5).ToList();
+            if (good.Count == 0)
             {
-                Console.WriteLine($"{r._name} ({r._type}) - Rating: {r._score}");
+                Console.WriteLine("ไม่มีร้านที่คะแนน 4.5 ขึ้นไป");
+            }
+            else
+            {
+                foreach (var g in good)
+                {
+                    Console.WriteLine($"{g._name} ({g._type}) - Rating: {g._score}");
+                }
             }
 
-            // ---------- ค้นหาร้านจากชื่อบางส่วน ----------
+            // ---------- feature/summary ----------
+            if (restaurants.Count > 0)
+            {
+                double maxScore = restaurants.Max(x => x._score);
+                double minScore = restaurants.Min(x => x._score);
+
+                Console.WriteLine();
+                Console.WriteLine("=== Summary ===");
+                Console.WriteLine($"Total is {restaurants.Count}");
+                Console.WriteLine($"Average is {restaurants.Average(x => x._score):F2}");
+
+                Console.WriteLine("Highest:");
+                foreach (var h in restaurants.Where(x => x._score == maxScore))
+                    Console.WriteLine($"  {h._name} ({h._type}) - Rating: {h._score}");
+
+                Console.WriteLine("Lowest:");
+                foreach (var l in restaurants.Where(x => x._score == minScore))
+                    Console.WriteLine($"  {l._name} ({l._type}) - Rating: {l._score}");
+            }
+
+            // ---------- feature/search-restaurant ----------
             Console.WriteLine();
             Console.Write("พิมพ์ชื่อร้าน (บางส่วนก็ได้) เพื่อค้นหา: ");
             string keyword = Console.ReadLine()?.Trim();
@@ -67,7 +90,7 @@ namespace RestaurantApp
             else
             {
                 var results = restaurants
-                    .Where(r => r._name.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .Where(x => x._name.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
                     .ToList();
 
                 if (results.Count == 0)
@@ -77,14 +100,14 @@ namespace RestaurantApp
                 else
                 {
                     Console.WriteLine($"พบ {results.Count} ร้าน:");
-                    foreach (var r in results)
+                    foreach (var s in results)
                     {
-                        Console.WriteLine($"{r.UID}. {r._name} ({r._type}) - Rating: {r._score}");
+                        Console.WriteLine($"{s.UID}. {s._name} ({s._type}) - Rating: {s._score}");
                     }
                 }
             }
 
-            Console.ReadLine();
+            Console.ReadLine(); // ค้างหน้าจอไว้ท้ายสุด
         }
     }
 
