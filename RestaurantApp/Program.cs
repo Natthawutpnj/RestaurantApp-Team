@@ -28,9 +28,36 @@ namespace RestaurantApp
             var avg = restaurants.Average(x => x._score);
             Console.WriteLine($"Total is {amount}");
             Console.WriteLine($"Average is {amount} ({avg})");
+            {
+                Console.WriteLine();
+                Console.Write("พิมพ์ชื่อร้าน (บางส่วนก็ได้) เพื่อค้นหา: ");
+                string keyword = Console.ReadLine()?.Trim();
 
-            
+                if (string.IsNullOrEmpty(keyword))
+                {
+                    Console.WriteLine("กรุณาพิมพ์คำค้นหา");
+                    return;
+                }
+
+                var results = restaurants
+                    .Where(r => r._name.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .ToList();
+
+                if (results.Count == 0)
+                {
+                    Console.WriteLine($"ไม่พบร้านที่มีคำว่า \"{keyword}\"");
+                }
+                else
+                {
+                    Console.WriteLine($"พบ {results.Count} ร้าน:");
+                    foreach (var r in results)
+                    {
+                        Console.WriteLine($"{r.UID}. {r._name} ({r._type}) - Rating: {r._score}");
+                    }
+                }
+            }
         }
+            
     }
     public class Restaurant
     {
@@ -48,4 +75,3 @@ namespace RestaurantApp
         }
     }
 }
-Console.WriteLine("hello");
