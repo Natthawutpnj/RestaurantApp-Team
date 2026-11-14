@@ -8,44 +8,37 @@ namespace RestaurantApp
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("HELLO TIT.1/1");
-            List<Restaurant> restaurants = new List<Restaurant>
-{
-    new Restaurant(1, "Quanjude Roast Duck", "Beijing Cuisine", 4.5),
-    new Restaurant(2, "Donglaishun Hot Pot", "Hot Pot", 4.6),
-    new Restaurant(3, "Din Tai Fung", "Taiwanese Cuisine", 4.7),
-    new Restaurant(4, "Huguosi Snacks", "Snacks", 4.2),
-    new Restaurant(5, "Haidilao Hot Pot", "Hot Pot", 4.8)
+            List<string> names = new List<string>();
+            List<string> types = new List<string>();
+            List<double> ratings = new List<double>();
 
-            };
-            foreach (var item in restaurants)
+            // รับข้อมูลจากคีย์บอร์ด
+            Console.Write("ชื่อร้าน: ");
+            string name = Console.ReadLine();
+
+            Console.Write("ประเภท: ");
+            string type = Console.ReadLine();
+
+            Console.Write("คะแนน (0-5): ");
+            double rating = double.Parse(Console.ReadLine());
+
+            // เพิ่มเข้า List
+            names.Add(name);
+            types.Add(type);
+            ratings.Add(rating);
+
+            Console.WriteLine("เพิ่มร้านเรียบร้อย");
+
+            // แสดงผล
+            Console.WriteLine("\nรายการร้านทั้งหมด:");
+            for (int i = 0; i < names.Count; i++)
             {
-                Console.WriteLine($"{item.UID}. {item._name} ({item._type}) - Rating: {item._score}");
+                Console.WriteLine(names[i] + " (" + types[i] + ") - " + ratings[i] + "/5");
             }
-            var amount = restaurants.Count();
-            var avg = restaurants.Average(x => x._score);
-            Console.WriteLine($"Total is {amount}");
-            Console.WriteLine($"Average is {amount} ({avg})");
 
-            
-        }
-    }
-    public class Restaurant
-    {
-        public int UID { get; set; }
-        public string _name { get; set; }
-        public string _type { get; set; }
-        public double _score { get; set; }
-
-        public Restaurant(int uid,string _name,string _type,double _score)
-        {
-            this.UID = uid;
-            this ._name = _name;
-            this ._type = _type;
-            this ._score = _score;
+            Console.ReadLine();
         }
     }
 }
-Console.WriteLine("hello");
